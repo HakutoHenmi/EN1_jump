@@ -39,7 +39,20 @@ public class PullingJump : MonoBehaviour
     }
     private void OnCollisionStay(Collision collision)
     {
-        isCanJump = true;
+        //衝突している点の情報が複数格納されている
+        ContactPoint[] contacts = collision.contacts;
+        //9番目の衛突情報から、衝突している点の法線を取得。
+        Vector3 otherNormal = contacts[0].normal;
+        // 上方向を示すベクトル。長さは1。
+        Vector3 upVector = new Vector3(0, 1, 0);
+        // 上方向と法線の内積。二つのベクトルはともに長さが1なので、
+        float dotUN = Vector3.Dot(upVector, otherNormal);
+        //内積値に逆三角間数arccosを掛けて角度を算出。それを度数法
+        float dotDeg = Mathf.Acos(dotUN) * Mathf.Rad2Deg;
+        if (dotDeg <= 45)
+        {
+            isCanJump = true;
+        }
         Debug.Log("接触中");
     }
     private void OnCollisionExit(Collision collision)
