@@ -6,6 +6,7 @@ public class PullingJump : MonoBehaviour
     private Vector3 clickPosition;
     [SerializeField]
     private float jumpPower = 10;
+    private bool isCanJump;
 
     void Start()
     {
@@ -19,15 +20,32 @@ public class PullingJump : MonoBehaviour
         {
             clickPosition = Input.mousePosition;
         }
-        if (Input.GetMouseButtonUp(0))
+        if (isCanJump && Input.GetMouseButtonUp(0))
         {
             // クリックした座標と離した座標の差分を取得
             Vector3 dist = clickPosition - Input.mousePosition;
             // クリックとリリースが同じ座標ならば無視
             if (dist.sqrMagnitude == 0) { return; }
             //差分を標準化し、jumpPowerをかけ合わせた値を移動量とする。
-            rb.velocity = dist.normalized * jumpPower;
+            rb.linearVelocity = dist.normalized * jumpPower;
 
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+
+        Debug.Log("衝突した");
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        isCanJump = true;
+        Debug.Log("接触中");
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        isCanJump = false;
+        Debug.Log("離脱した");
+    }
+
 }
