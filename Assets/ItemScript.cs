@@ -2,9 +2,19 @@ using UnityEngine;
 
 public class ItemScript : MonoBehaviour
 {
+
+    private Animator animator;
+
+    void Start()
+    {
+
+        animator = GetComponent<Animator>();
+
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        DestroySelf();
+        animator.SetTrigger("Get");
     }
 
     private void OnTriggerStay(Collider other)
@@ -17,7 +27,7 @@ public class ItemScript : MonoBehaviour
         Debug.Log("Exit");
     }
 
-    private void DestroySelf()
+    public void DestroySelf()
     {
         Destroy(gameObject);
     }
